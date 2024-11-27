@@ -1,0 +1,6 @@
+[FORMAT]
+indent-string=\t
+max-line-length=160
+
+[MASTER]
+disable=C0114,C0116
