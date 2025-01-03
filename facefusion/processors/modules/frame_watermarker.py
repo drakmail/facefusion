@@ -33,6 +33,9 @@ def pre_check() -> bool:
 
 
 def pre_process(mode: ProcessMode) -> bool:
+	if mode == 'preview':
+		return False
+
 	return True
 
 

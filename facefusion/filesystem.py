@@ -54,7 +54,11 @@ def has_audio(audio_paths : List[str]) -> bool:
 
 
 def is_image(image_path : str) -> bool:
-	return is_file(image_path) and filetype.helpers.is_image(image_path)
+	if not is_file(image_path):
+		return False
+
+	image_extensions = ('.jpg', '.jpeg', '.png', '.webp')
+	return str(image_path).lower().endswith(image_extensions)
 
 
 def has_image(image_paths: List[str]) -> bool:
@@ -64,7 +68,11 @@ def has_image(image_paths: List[str]) -> bool:
 
 
 def is_video(video_path : str) -> bool:
-	return is_file(video_path) and filetype.helpers.is_video(video_path)
+	if not is_file(video_path):
+		return False
+
+	video_extensions = ('.mp4', '.webm', '.mkv', '.flv', '.avi', '.mov')
+	return str(video_path).lower().endswith(video_extensions)
 
 
 def filter_audio_paths(paths : List[str]) -> List[str]:
