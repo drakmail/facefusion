@@ -57,7 +57,7 @@ def is_image(image_path : str) -> bool:
 	if not is_file(image_path):
 		return False
 
-	image_extensions = ('.jpg', '.jpeg', '.png', '.webp')
+	image_extensions = ('.jpg', '.jpeg', '.png', '.webp', '.heic')
 	return str(image_path).lower().endswith(image_extensions)
 
 
