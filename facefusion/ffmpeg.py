@@ -70,6 +70,8 @@ def merge_video(target_path : str, output_video_resolution : str, output_video_f
 	temp_file_path = get_temp_file_path(target_path)
 	temp_frames_pattern = get_temp_frames_pattern(target_path, '%08d')
 	commands = [ '-r', str(temp_video_fps), '-i', temp_frames_pattern, '-s', str(output_video_resolution), '-c:v', state_manager.get_item('output_video_encoder') ]
+	# optimize for web
+	commands.extend(['-movflags', '+faststart'])
 
 	if state_manager.get_item('output_video_encoder') in [ 'libx264', 'libx265' ]:
 		output_video_compression = round(51 - (state_manager.get_item('output_video_quality') * 0.51))
