@@ -348,6 +348,12 @@ def pre_process(mode : ProcessMode) -> bool:
 	if mode in [ 'output', 'preview' ] and not is_image(state_manager.get_item('target_path')) and not is_video(state_manager.get_item('target_path')):
 		logger.error(wording.get('choose_image_or_video_target') + wording.get('exclamation_mark'), __name__)
 		return False
+	if mode in [ 'output', 'preview' ] and is_image(state_manager.get_item('target_path')):
+		target_frame = read_static_image(state_manager.get_item('target_path'))
+		target_faces = get_many_faces([ target_frame ])
+		if not get_one_face(target_faces):
+			logger.error(wording.get('no_target_face_detected') + wording.get('exclamation_mark'), __name__)
+			return False
 	if mode == 'output' and not in_directory(state_manager.get_item('output_path')):
 		logger.error(wording.get('specify_image_or_video_output') + wording.get('exclamation_mark'), __name__)
 		return False

@@ -41,6 +41,7 @@ WORDING : Dict[str, Any] =\
 	'specify_image_or_video_output': 'Specify the output image or video within a directory',
 	'match_target_and_output_extension': 'Match the target and output extension',
 	'no_source_face_detected': 'No source face detected',
+	'no_target_face_detected': 'No target face detected',
 	'processor_not_loaded': 'Processor {processor} could not be loaded',
 	'processor_not_implemented': 'Processor {processor} not implemented correctly',
 	'ui_layout_not_loaded': 'UI layout {ui_layout} could not be loaded',
