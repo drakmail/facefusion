@@ -70,8 +70,6 @@ def merge_video(target_path : str, output_video_resolution : str, output_video_f
 	temp_file_path = get_temp_file_path(target_path)
 	temp_frames_pattern = get_temp_frames_pattern(target_path, '%08d')
 	commands = [ '-r', str(temp_video_fps), '-i', temp_frames_pattern, '-s', str(output_video_resolution), '-c:v', state_manager.get_item('output_video_encoder') ]
-	# optimize for web
-	commands.extend(['-movflags', '+faststart'])
 
 	if state_manager.get_item('output_video_encoder') in [ 'libx264', 'libx265' ]:
 		output_video_compression = round(51 - (state_manager.get_item('output_video_quality') * 0.51))
@@ -87,7 +85,7 @@ def merge_video(target_path : str, output_video_resolution : str, output_video_f
 		commands.extend([ '-qp_i', str(output_video_compression), '-qp_p', str(output_video_compression), '-quality', map_amf_preset(state_manager.get_item('output_video_preset')) ])
 	if state_manager.get_item('output_video_encoder') in [ 'h264_videotoolbox', 'hevc_videotoolbox' ]:
 		commands.extend([ '-q:v', str(state_manager.get_item('output_video_quality')) ])
-	commands.extend([ '-vf', 'framerate=fps=' + str(output_video_fps), '-pix_fmt', 'yuv420p', '-colorspace', 'bt709', '-y', temp_file_path ])
+	commands.extend([ '-vf', 'framerate=fps=' + str(output_video_fps), '-pix_fmt', 'yuv420p', '-colorspace', 'bt709', '-movflags', '+faststart', '-y', temp_file_path ])
 	return run_ffmpeg(commands).returncode == 0
 
 
