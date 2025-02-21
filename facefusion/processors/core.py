@@ -55,8 +55,10 @@ def get_processors_modules(processors : List[str]) -> List[ModuleType]:
 		processor_modules.append(processor_module)
 
 
-	processor_module = load_processor_module('frame_watermarker')
-	processor_modules.append(processor_module)
+	for processor in processors:
+		if processor == 'frame_watermarker':
+			processor_module = load_processor_module('frame_watermarker')
+			processor_modules.append(processor_module)
 
 	return processor_modules
 
