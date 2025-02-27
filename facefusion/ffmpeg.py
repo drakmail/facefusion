@@ -13,10 +13,14 @@ from facefusion.typing import AudioBuffer, Fps, OutputVideoPreset
 from facefusion.vision import restrict_video_fps
 
 
-def run_ffmpeg(args : List[str]) -> subprocess.Popen[bytes]:
+def run_ffmpeg(args : List[str], timeout_seconds : Optional[int] = None) -> subprocess.Popen[bytes]:
 	commands = [ shutil.which('ffmpeg'), '-hide_banner', '-loglevel', 'error' ]
 	commands.extend(args)
 	process = subprocess.Popen(commands, stderr = subprocess.PIPE, stdout = subprocess.PIPE)
+	start_time = None
+	if timeout_seconds is not None:
+		import time
+		start_time = time.time()
 
 	while process_manager.is_processing():
 		try:
@@ -24,6 +28,13 @@ def run_ffmpeg(args : List[str]) -> subprocess.Popen[bytes]:
 				log_debug(process)
 			process.wait(timeout = 0.5)
 		except subprocess.TimeoutExpired:
+			# Check if the process has exceeded the timeout
+			if timeout_seconds is not None and start_time is not None:
+				elapsed_time = time.time() - start_time
+				if elapsed_time > timeout_seconds:
+					logger.warning(f"FFmpeg process timed out after {timeout_seconds} seconds", __name__)
+					process.terminate()
+					return process
 			continue
 		return process
 
@@ -62,7 +73,7 @@ def extract_frames(target_path : str, temp_video_resolution : str, temp_video_fp
 	else:
 		commands.extend([ '-vf', 'fps=' + str(temp_video_fps) ])
 	commands.extend([ '-vsync', '0', temp_frames_pattern ])
-	return run_ffmpeg(commands).returncode == 0
+	return run_ffmpeg(commands, timeout_seconds=1500).returncode == 0
 
 
 def merge_video(target_path : str, output_video_resolution : str, output_video_fps : Fps) -> bool:
