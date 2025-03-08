@@ -58,7 +58,14 @@ def get_reference_frame(source_face: Face, target_face: Face, temp_vision_frame:
 def extrapolate_thikness(diag: float) -> int:
 	a = 5 / 202
 	b = -2.0792
-	return round(a * diag + b)
+	thickness = round(a * diag + b)
+
+	# Reduce thickness for hard model by a factor of 3
+	model = state_manager.get_item('frame_watermarker_model')
+	if model != 'default':
+		thickness = max(1, round(thickness / 3))
+
+	return thickness
 
 
 def can_fit_diagonally(inner_width: float, inner_height: float, outer_width: float, outer_height: float) -> bool:
