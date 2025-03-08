@@ -63,7 +63,7 @@ def extrapolate_thikness(diag: float) -> int:
 	# Reduce thickness for hard model by a factor of 3
 	model = state_manager.get_item('frame_watermarker_model')
 	if model != 'default':
-		thickness = max(1, round(thickness / 3))
+		thickness = max(1, round(thickness / 10))
 
 	return thickness
 
