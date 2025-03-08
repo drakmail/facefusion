@@ -5,11 +5,15 @@ from typing import List
 import cv2
 import numpy as np
 
+import facefusion.jobs.job_manager
+import facefusion.jobs.job_store
 import facefusion.processors.core as processors
-from facefusion import process_manager
+from facefusion import process_manager, wording, config, state_manager
 from facefusion.processors.typing import FrameWatermarkerInputs
 from facefusion.typing import ApplyStateItem, Args, Face, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
 from facefusion.vision import read_image, read_static_image, write_image
+from facefusion.processors import choices as processors_choices
+from facefusion.program_helper import find_argument_group
 
 
 def get_inference_pool() -> None:
@@ -21,11 +25,14 @@ def clear_inference_pool() -> None:
 
 
 def register_args(program: ArgumentParser) -> None:
-	pass
+	group_processors = find_argument_group(program, 'processors')
+	if group_processors:
+		group_processors.add_argument('--frame-watermarker-model', help = wording.get('help.frame_watermarker_model'), default = config.get_str_value('processors.frame_watermarker_model', 'default'), choices = processors_choices.frame_watermarker_models)
+		facefusion.jobs.job_store.register_step_keys([ 'frame_watermarker_model' ])
 
 
 def apply_args(args: Args, apply_state_item: ApplyStateItem) -> None:
-	pass
+	apply_state_item('frame_watermarker_model', args.get('frame_watermarker_model'))
 
 
 def pre_check() -> bool:
@@ -92,8 +99,9 @@ def get_optimal_font_scale(text: str, width: int, height: int) -> float:
 
 def prepare_text_frame(temp_vision_frame: VisionFrame) -> VisionFrame:
 	height, width = temp_vision_frame.shape[:2]
+	model = state_manager.get_item('frame_watermarker_model')
 
-	text = 'DEEPFAKE'
+	text = 'DEEPFAKE' if model == 'default' else 'Purchase premium for just $1 to hide watermarks'
 	font = cv2.FONT_HERSHEY_DUPLEX
 	color = (255, 255, 255)
 
@@ -123,7 +131,9 @@ def prepare_text_frame(temp_vision_frame: VisionFrame) -> VisionFrame:
 def watermark_frame(temp_vision_frame: VisionFrame, source_watermark_frame: VisionFrame) -> VisionFrame:
 	temp_vision_frame = temp_vision_frame.copy()
 
-	temp_vision_frame = cv2.addWeighted(temp_vision_frame, 1, source_watermark_frame, 0.03, 0)
+	model = state_manager.get_item('frame_watermarker_model')
+	opacity = 0.03 if model == 'default' else 0.6
+	temp_vision_frame = cv2.addWeighted(temp_vision_frame, 1, source_watermark_frame, opacity, 0)
 
 	return temp_vision_frame
 

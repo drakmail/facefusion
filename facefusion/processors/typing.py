@@ -12,6 +12,7 @@ FaceEnhancerModel = Literal['codeformer', 'gfpgan_1.2', 'gfpgan_1.3', 'gfpgan_1.
 FaceSwapperModel = Literal['blendswap_256', 'ghost_1_256', 'ghost_2_256', 'ghost_3_256', 'inswapper_128', 'inswapper_128_fp16', 'simswap_256', 'simswap_unofficial_512', 'uniface_256']
 FrameColorizerModel = Literal['ddcolor', 'ddcolor_artistic', 'deoldify', 'deoldify_artistic', 'deoldify_stable']
 FrameEnhancerModel = Literal['clear_reality_x4', 'lsdir_x4', 'nomos8k_sc_x4', 'real_esrgan_x2', 'real_esrgan_x2_fp16', 'real_esrgan_x4', 'real_esrgan_x4_fp16', 'real_hatgan_x4', 'real_esrgan_x8', 'real_esrgan_x8_fp16', 'span_kendata_x4', 'ultra_sharp_x4']
+FrameWatermarkerModel = Literal['default', 'hard']
 LipSyncerModel = Literal['wav2lip_96', 'wav2lip_gan_96']
 
 FaceSwapperSet = Dict[FaceSwapperModel, List[str]]
@@ -98,6 +99,7 @@ ProcessorStateKey = Literal\
 	'frame_colorizer_size',
 	'frame_colorizer_blend',
 	'frame_enhancer_model',
+	'frame_watermarker_model',
 	'frame_enhancer_blend',
 	'lip_syncer_model'
 ]
@@ -132,6 +134,7 @@ ProcessorState = TypedDict('ProcessorState',
 	'frame_colorizer_blend' : int,
 	'frame_enhancer_model' : FrameEnhancerModel,
 	'frame_enhancer_blend' : int,
+	'frame_watermarker_model' : FrameWatermarkerModel,
 	'lip_syncer_model' : LipSyncerModel
 })
 ProcessorStateSet = Dict[AppContext, ProcessorState]

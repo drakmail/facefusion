@@ -168,6 +168,7 @@ WORDING : Dict[str, Any] =\
 		'frame_colorizer_blend': 'blend the colorized into the previous frame',
 		'frame_enhancer_model': 'choose the model responsible for enhancing the frame',
 		'frame_enhancer_blend': 'blend the enhanced into the previous frame',
+		'frame_watermarker_model': 'choose the model responsible for watermarking the frame',
 		'lip_syncer_model': 'choose the model responsible for syncing the lips',
 		# uis
 		'open_browser': 'open the browser once the program is ready',
@@ -272,6 +273,7 @@ WORDING : Dict[str, Any] =\
 		'frame_colorizer_size_dropdown': 'FRAME COLORIZER SIZE',
 		'frame_enhancer_blend_slider': 'FRAME ENHANCER BLEND',
 		'frame_enhancer_model_dropdown': 'FRAME ENHANCER MODEL',
+		'frame_watermarker_model_dropdown': 'FRAME WATERMARKER MODEL',
 		'job_list_status_checkbox_group': 'JOB STATUS',
 		'job_manager_job_action_dropdown': 'JOB_ACTION',
 		'job_manager_job_id_dropdown': 'JOB ID',
